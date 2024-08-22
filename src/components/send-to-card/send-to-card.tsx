@@ -1,10 +1,9 @@
 import { Paper, Box, Flex, Text } from '@mantine/core';
 import { TokenSelect } from '../token-select';
-import { Balance } from '../balance';
 import { FromTokenAmount } from '../from-token-amount-input';
 import { SendToAddressInput } from '../send-to-address-input';
 import { SendToButton } from '../send-to-button';
-import { UsdAmount } from '../usd-amount';
+import { SelectedTokenUsdAmount } from '../selected-token-usd-amount';
 
 export const SendToCard = () => {
   return (
@@ -12,10 +11,9 @@ export const SendToCard = () => {
       <Paper shadow="md" radius="lg" p="xl">
         <Flex justify="space-between" align="center">
           <Text fw="bold">Send</Text>
-          <Balance />
+          <SelectedTokenUsdAmount />
         </Flex>
         <FromTokenAmount />
-        <UsdAmount />
         <Box mt="xs">
           <TokenSelect />
         </Box>

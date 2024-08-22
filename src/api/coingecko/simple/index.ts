@@ -1,23 +1,27 @@
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '../client';
-import coinlistJson from '../coinlist.json';
-import type { CoinListItem } from '../types';
+import { COINGECKO_NETWORK_ID } from '../constants';
 
-export const coinlist = coinlistJson as unknown as Record<string, CoinListItem>;
-export const useTokenPrice = (symbol?: string) => {
+export const useTokenPrice = (address?: string, chainId?: number) => {
   return useQuery({
-    enabled: !!symbol,
-    queryKey: ['user/token_price', symbol],
-    queryFn: () => {
-      const id = symbol ? coinlist[symbol]?.id : '';
-      console.log('coinlist', { symbol, coinlist });
+    enabled: !!address && !!chainId,
+    queryKey: ['user/token_price', address],
+    queryFn: async () => {
+      if (!chainId || !address) return;
 
-      return apiClient.get(`/simple/price`, {
+      const id = COINGECKO_NETWORK_ID[chainId];
+
+      if (!id) return;
+
+      const { data } = await apiClient.get(`/simple/token_price/${id}`, {
         params: {
-          ids: id,
+          contract_addresses: address,
           vs_currencies: 'usd',
         },
       });
+
+      return data;
     },
+    select: (data) => (address ? data[address]?.usd : null),
   });
 };

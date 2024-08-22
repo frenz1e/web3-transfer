@@ -5,28 +5,42 @@ import { TokenListModal } from '../token-list-modal';
 import { Token } from '../../types';
 import { useAppStore } from '../../store';
 import { CoinIcon } from '../coin-icon/coin-icon';
+import { Balance } from '../balance';
+import { useAccount } from 'wagmi';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
 
 export const TokenSelect = () => {
   const [opened, { open, close }] = useDisclosure(false);
   const tokenFrom = useAppStore.use.fromToken();
   const setTokenFrom = useAppStore.use.setFromToken();
+  const { address } = useAccount();
+  const { openConnectModal } = useConnectModal();
 
   const handleSelect = (value: Token) => {
     close();
     setTokenFrom(value);
   };
 
+  const handleOpen = () => {
+    if (!address) return openConnectModal && openConnectModal();
+
+    open();
+  };
+
   return (
     <>
-      <Card onClick={open} p="sm" shadow="none" withBorder style={{ cursor: 'pointer' }}>
+      <Card onClick={handleOpen} p="sm" shadow="none" withBorder style={{ cursor: 'pointer' }}>
         <Flex direction="row" align="center" justify="space-between">
           <Flex direction="row" align="center" gap="sm">
             {tokenFrom && (
               <CoinIcon symbol={tokenFrom.symbol} chainId={tokenFrom.chainId} address={tokenFrom.address} />
             )}
-            <Text size="xl" fw="600">
-              {tokenFrom?.symbol || '-'}
-            </Text>
+            <Flex direction="column">
+              <Text size="md" fw="600">
+                {tokenFrom?.symbol || '-'}
+              </Text>
+              <Balance />
+            </Flex>
           </Flex>
           <IconChevronDown />
         </Flex>

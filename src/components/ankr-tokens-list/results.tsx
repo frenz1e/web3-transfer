@@ -4,11 +4,11 @@ import classes from './tokens-list.module.css';
 import { useAppStore } from '../../store';
 import { useAccountBalance } from 'ankr-react';
 import { useAccount } from 'wagmi';
-import { AnkrBlockchainParam } from '../../constants';
-import { formatUsd } from '../../utils/format-usd';
+import { AnkrBlockchainParam, NATIVE_COIN_ADDRESS } from '../../constants';
 import { Balance } from '@ankr.com/ankr.js/dist/types';
 import { useMemo } from 'react';
 import { CoinIcon } from '../coin-icon/coin-icon';
+import { UsdAmount } from '../usd-amount';
 
 export const Results = ({ onClick }: { onClick: (token: Token) => void }) => {
   const searchText = useAppStore.use.fromTokenSearch();
@@ -48,7 +48,7 @@ export const Results = ({ onClick }: { onClick: (token: Token) => void }) => {
           <Flex
             px="lg"
             py="sm"
-            key={item.contractAddress}
+            key={item.tokenName}
             justify="space-between"
             align="center"
             className={classes.row}
@@ -60,9 +60,11 @@ export const Results = ({ onClick }: { onClick: (token: Token) => void }) => {
                 {item.tokenSymbol}
               </Text>
             </Flex>
-            <Text fz="md" fw={500} c="gray">
-              {item.balance} ({formatUsd(item.balanceUsd)})
-            </Text>
+            <Flex align="center">
+              <Text fz="md" fw={500} c="gray">
+                {item.balance}
+              </Text>
+            </Flex>
           </Flex>
         ))
       )}

@@ -1,17 +1,25 @@
-import { Box, Text } from '@mantine/core';
-import { useAppStore } from '../../store';
+import { Skeleton, Text, TextProps } from '@mantine/core';
 import { useTokenPrice } from '../../api/coingecko';
 
-export const UsdAmount = () => {
-  const tokenAmount = useAppStore.use.fromTokenAmount();
-  const token = useAppStore.use.fromToken();
-  const { data } = useTokenPrice(token ? token.symbol : undefined);
-  console.log('>>>', data);
-  const price = 0;
+export const UsdAmount = ({
+  amount,
+  address,
+  chainId,
+  ...props
+}: {
+  amount: number;
+  address: `0x${string}`;
+  chainId: number;
+} & TextProps) => {
+  const { data: price, isLoading } = useTokenPrice(address, chainId);
 
-  return (
-    <Box mih={19}>
-      {tokenAmount && price && <Text fz={12}>${new Intl.NumberFormat('en-US').format(+tokenAmount * price)}</Text>}
-    </Box>
+  return isLoading ? (
+    <Skeleton visible height={15} width={50} />
+  ) : (
+    !!price && (
+      <Text fz={10} c="gray" {...props}>
+        ~${price ? new Intl.NumberFormat('en-US').format(+amount * price) : ''}
+      </Text>
+    )
   );
 };

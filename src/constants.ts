@@ -6,10 +6,10 @@ export const ANKR_API_KEY = import.meta.env.VITE_ANKR_API_KEY;
 
 if (!ANKR_API_KEY) throw new Error('VITE_ANKR_API_KEY is required');
 
-export const SUPPORTED_CHAINS = [mainnet, arbitrum, bsc] as [Chain, ...Chain[]];
-export const SUPPORTED_CHAINS_IDS = SUPPORTED_CHAINS.map((chain) => chain.id);
+export const SUPPORTED_CHAINS = [mainnet, arbitrum] as [Chain, ...Chain[]];
+export const SUPPORTED_CHAINS_IDS = [mainnet.id, arbitrum.id] as const;
 
-export const NATIVE_COINS_ADDRESS = '0x0000000000000000000000000000000000000000';
+export const NATIVE_COIN_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 export const DEFAULT_TOKEN: Token = {
   symbol: 'ETH',
@@ -21,7 +21,7 @@ export const DEFAULT_TOKEN: Token = {
 
 export const MAX_TOKEN_DECIMALS = 5;
 
-export const AnkrBlockchainParam: Record<(typeof SUPPORTED_CHAINS_IDS)[number], Blockchain> = {
+export const AnkrBlockchainParam: Record<number, Blockchain> = {
   [mainnet.id]: 'eth',
   [arbitrum.id]: 'arbitrum',
 };

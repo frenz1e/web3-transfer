@@ -15,7 +15,11 @@ export const Balance = () => {
           <Skeleton visible height={15} width={150} />
         </Flex>
       ) : (
-        data && <Text size="sm">Balance: {parseFloat(balance)}</Text>
+        data && (
+          <Text size="sm" c="gray">
+            Balance: {parseFloat(balance)}
+          </Text>
+        )
       )}
     </Flex>
   );

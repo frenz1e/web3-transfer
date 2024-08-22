@@ -1,7 +1,7 @@
 import { Avatar, AvatarProps } from '@mantine/core';
 import { useCoinlist } from '../../hooks/use-coinlist';
 import { mainnet, bsc, arbitrum } from 'viem/chains';
-import { NATIVE_COINS_ADDRESS } from '../../constants';
+import { NATIVE_COIN_ADDRESS } from '../../constants';
 
 const eth: Record<number, boolean> = {
   [mainnet.id]: true,
@@ -23,7 +23,7 @@ export const CoinIcon = ({
 }: { chainId: number; symbol: string; address?: string } & AvatarProps) => {
   const { data } = useCoinlist(chainId, address);
 
-  const src = address && address !== NATIVE_COINS_ADDRESS ? data?.logoURI : getNativeCoinLogo(chainId);
+  const src = address && address !== NATIVE_COIN_ADDRESS ? data?.logoURI : getNativeCoinLogo(chainId);
 
   return (
     <Avatar src={src} name={address} {...props}>

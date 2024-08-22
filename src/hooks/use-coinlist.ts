@@ -8,16 +8,17 @@ export const useCoinlist = (chainId?: number, address?: string) => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    try {
-      setLoading(true);
-      import('../api/coingecko/coinlist.json').then((data) => {
+    setLoading(true);
+    import('../api/coingecko/coinlist.json')
+      .then((data) => {
         setCoinlist(data.default);
+      })
+      .catch((error) => {
+        console.info(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-    } catch (error) {
-      console.info(error);
-    } finally {
-      setLoading(false);
-    }
   }, []);
 
   if (chainId && address && coinlist[chainId]) return { loading, data: coinlist[chainId][address.toLowerCase()] };
