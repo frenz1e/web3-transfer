@@ -1,5 +1,6 @@
 import { Skeleton, Text, TextProps } from '@mantine/core';
-import { useTokenPrice } from '../../api/coingecko';
+import { useNativeTokenPrice, useTokenPrice } from '../../api/coingecko';
+import { NATIVE_COIN_ADDRESS } from '@src/constants';
 
 export const UsdAmount = ({
   amount,
@@ -12,13 +13,15 @@ export const UsdAmount = ({
   chainId: number;
 } & TextProps) => {
   const { data: price, isLoading } = useTokenPrice(address, chainId);
-
-  return isLoading ? (
+  const { data: nativePrice, isLoading: nativeIsLoading } = useNativeTokenPrice(chainId);
+  const _price = address === NATIVE_COIN_ADDRESS ? nativePrice : price;
+  console.log('price', price, nativePrice, address === NATIVE_COIN_ADDRESS, address, NATIVE_COIN_ADDRESS, nativePrice);
+  return isLoading || nativeIsLoading ? (
     <Skeleton visible height={15} width={50} />
   ) : (
-    !!price && (
+    !!_price && (
       <Text fz={10} c="gray" {...props}>
-        ~${price ? new Intl.NumberFormat('en-US').format(+amount * price) : ''}
+        ~${_price ? new Intl.NumberFormat('en-US').format(+amount * _price) : ''}
       </Text>
     )
   );
