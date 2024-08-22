@@ -1,7 +1,7 @@
-import { Box, Button, Anchor } from '@mantine/core';
+import { Box, Button } from '@mantine/core';
 import { useAccount, useEnsAddress, useSendTransaction, useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 import { useAppStore } from '../../store';
-import { isAddress, parseEther } from 'viem';
+import { isAddress, parseEther, parseUnits } from 'viem';
 import { useEffect, useState } from 'react';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useFromTokenBalance } from '../../hooks/use-from-token-balance';
@@ -10,6 +10,7 @@ import { getLabel, prepareName } from './helpers';
 import { config } from '../../rainbowkit';
 import { erc20Abi } from 'viem';
 import { NATIVE_COIN_ADDRESS } from '@src/constants';
+import { TransactionItem } from '../transaction-item';
 
 export const SendToButton = () => {
   const account = useAccount();
@@ -69,21 +70,23 @@ export const SendToButton = () => {
   };
 
   const sendToken = async () => {
+    if (!fromToken) return;
+
     try {
       const txId = await writeContractAsync({
         address: fromTokenAddress!,
         abi: erc20Abi,
         functionName: 'transfer',
-        args: [sendToAddress as `0x${string}`, BigInt(amount)],
+        args: [sendToAddress as `0x${string}`, parseUnits(amount, fromToken.decimals)],
       });
 
       setHash(txId);
+      setFromTokenAmount('');
+      setSendTo('');
     } catch (error) {
       console.info('Error sending transaction', error);
     }
   };
-
-  console.log({ fromTokenAddress });
 
   const handleSubmitTransaction = () => {
     if (fromTokenAddress === NATIVE_COIN_ADDRESS) {
@@ -94,19 +97,16 @@ export const SendToButton = () => {
   };
 
   useEffect(() => {
-    if (isSuccess) {
-      setFromTokenAmount('');
-      setSendTo('');
-    }
-  }, [isSuccess]);
-
-  useEffect(() => {
-    setSendToAddress(ensAddress || (isValidAddress ? sendTo : ''));
+    setSendToAddress((ensAddress || (isValidAddress ? sendTo : '')) as `0x${string}`);
   }, [ensAddress, sendTo]);
 
   useEffect(() => {
     if (isConfirmed) refetchBalance();
   }, [isConfirmed]);
+
+  useEffect(() => {
+    setHash(undefined);
+  }, [account.chainId]);
 
   return (
     <>
@@ -114,12 +114,13 @@ export const SendToButton = () => {
         {getLabel({ walletAddress: account.address, amount, sendToAddress, insufficientFunds })}
       </Button>
       <Box>
-        {hash && (
-          <Anchor fz={12} target="_blank" href={`https://sepolia.etherscan.io/tx/${hash}`}>
-            Transaction
-            {isConfirming && <> (Waiting for confirmation)</>}
-            {isConfirmed && <> (Confirmed)</>}
-          </Anchor>
+        {account.chainId && hash && (
+          <TransactionItem
+            chainId={account.chainId}
+            hash={hash}
+            isConfirmed={isConfirmed}
+            isConfirming={isConfirming}
+          />
         )}
       </Box>
     </>
