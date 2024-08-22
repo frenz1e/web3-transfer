@@ -8,7 +8,6 @@ import { AnkrBlockchainParam, NATIVE_COIN_ADDRESS } from '../../constants';
 import { Balance } from '@ankr.com/ankr.js/dist/types';
 import { useMemo } from 'react';
 import { CoinIcon } from '../coin-icon/coin-icon';
-import { UsdAmount } from '../usd-amount';
 
 export const Results = ({ onClick }: { onClick: (token: Token) => void }) => {
   const searchText = useAppStore.use.fromTokenSearch();
@@ -28,12 +27,12 @@ export const Results = ({ onClick }: { onClick: (token: Token) => void }) => {
   );
 
   const handleClick = ({ tokenSymbol, tokenName, tokenDecimals, contractAddress }: Balance) => {
-    if (!chainId || !contractAddress) return;
+    if (!chainId) return;
 
     onClick({
       symbol: tokenSymbol,
       name: tokenName,
-      address: contractAddress,
+      address: contractAddress || NATIVE_COIN_ADDRESS,
       decimals: tokenDecimals,
       chainId,
     });

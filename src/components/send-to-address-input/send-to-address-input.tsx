@@ -11,7 +11,7 @@ export const SendToAddressInput = () => {
       <Input
         size="xl"
         my="xs"
-        placeholder="Wallet address or ENS name"
+        placeholder="Wallet address"
         flex={1}
         value={sendTo}
         onChange={(e) => setSendTo(e.target.value)}

@@ -86,7 +86,6 @@ export const SendToButton = () => {
   console.log({ fromTokenAddress });
 
   const handleSubmitTransaction = () => {
-    console.log({ fromTokenAddress });
     if (fromTokenAddress === NATIVE_COIN_ADDRESS) {
       sendNativeCoin();
     } else {

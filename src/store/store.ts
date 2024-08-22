@@ -12,14 +12,14 @@ type State = {
   fromTokenSearch: string;
   balances: Record<`0x${string}`, string>;
   sendTo: string;
-  sendToAddress: string;
+  sendToAddress: `0x${string}` | '';
 };
 
 type Actions = {
   setFromToken: (selected: Token) => void;
   setFromTokenAmount: (value: string) => void;
   setBalances: (address: `0x${string}`, value: string) => void;
-  setSendToAddress: (address: string) => void;
+  setSendToAddress: (address: `0x${string}`) => void;
   setSendTo: (address: string) => void;
   setFromTokenSearch: (val: string) => void;
 };
@@ -46,7 +46,7 @@ const useAppStoreBase = create<State & Actions>()(
       set((state) => {
         state.balances[address] = value;
       }),
-    setSendToAddress: (address: string) => {
+    setSendToAddress: (address: `0x${string}` | '') => {
       set((state) => {
         state.sendToAddress = address;
       });

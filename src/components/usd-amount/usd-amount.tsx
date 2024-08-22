@@ -15,7 +15,7 @@ export const UsdAmount = ({
   const { data: price, isLoading } = useTokenPrice(address, chainId);
   const { data: nativePrice, isLoading: nativeIsLoading } = useNativeTokenPrice(chainId);
   const _price = address === NATIVE_COIN_ADDRESS ? nativePrice : price;
-  console.log('price', price, nativePrice, address === NATIVE_COIN_ADDRESS, address, NATIVE_COIN_ADDRESS, nativePrice);
+
   return isLoading || nativeIsLoading ? (
     <Skeleton visible height={15} width={50} />
   ) : (
