@@ -1,6 +1,6 @@
 import { Token } from './types';
 import { Blockchain } from '@ankr.com/ankr.js/dist/types';
-import { mainnet, arbitrum, Chain, bsc } from 'viem/chains';
+import { mainnet, arbitrum, Chain } from 'viem/chains';
 
 export const ANKR_API_KEY = import.meta.env.VITE_ANKR_API_KEY;
 

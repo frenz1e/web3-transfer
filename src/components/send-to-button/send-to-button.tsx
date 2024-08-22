@@ -27,7 +27,7 @@ export const SendToButton = () => {
   const setSendTo = useAppStore.use.setSendTo();
   const { refetch: refetchBalance } = useFromTokenBalance();
 
-  const { sendTransactionAsync, isPending, isSuccess } = useSendTransaction({
+  const { sendTransactionAsync, isPending } = useSendTransaction({
     config,
   });
 
