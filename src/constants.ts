@@ -9,7 +9,7 @@ if (!ANKR_API_KEY) throw new Error('VITE_ANKR_API_KEY is required');
 export const SUPPORTED_CHAINS = [mainnet, arbitrum] as [Chain, ...Chain[]];
 export const SUPPORTED_CHAINS_IDS = [mainnet.id, arbitrum.id] as const;
 
-export const NATIVE_COIN_ADDRESS = '0x0000000000000000000000000000000000000000';
+export const NATIVE_COIN_ADDRESS: `0x${string}` = '0x0000000000000000000000000000000000000000';
 
 export const DEFAULT_TOKEN: Token = {
   symbol: 'ETH',
