@@ -32,7 +32,7 @@ export const Results = ({ onClick }: { onClick: (token: Token) => void }) => {
     onClick({
       symbol: tokenSymbol,
       name: tokenName,
-      address: contractAddress || NATIVE_COIN_ADDRESS,
+      address: (contractAddress || NATIVE_COIN_ADDRESS) as `0x${string}`,
       decimals: tokenDecimals,
       chainId,
     });
