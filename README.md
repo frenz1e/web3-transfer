@@ -6,6 +6,7 @@ Zustand +
 Tanstack query +
 Viem +
 Wagmi +
-Mantine
+Mantine +
+Rainbow Kit
 
 Example: https://web3-transfer-1.vercel.app
